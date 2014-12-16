@@ -1,6 +1,6 @@
 {
 	"name": "doxxo",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Docco for block-style comments.",
 	"author": "Beneath the Ink <info@beneaththeink.com>",
 	"contributors": [
@@ -16,6 +16,9 @@
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/BeneathTheInk/doxxo.git"
+	},
+	"bin": {
+		"doxxo": "bin/doxxo"
 	},
 	"main": "lib/doxxo.js",
 	"dependencies": {
