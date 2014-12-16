@@ -17,6 +17,9 @@
 		"type": "git",
 		"url": "https://github.com/BeneathTheInk/doxxo.git"
 	},
+	"scripts": {
+		"build-docs": "node ./bin/doxxo ./lib/index.js"
+	},
 	"bin": {
 		"doxxo": "./bin/doxxo"
 	},
