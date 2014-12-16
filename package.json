@@ -1,6 +1,6 @@
 {
 	"name": "doxxo",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "Docco for block-style comments.",
 	"author": "Beneath the Ink <info@beneaththeink.com>",
 	"contributors": [
