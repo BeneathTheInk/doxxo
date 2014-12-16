@@ -18,9 +18,9 @@
 		"url": "https://github.com/BeneathTheInk/doxxo.git"
 	},
 	"bin": {
-		"doxxo": "bin/doxxo"
+		"doxxo": "./bin/doxxo"
 	},
-	"main": "lib/doxxo.js",
+	"main": "./lib/index.js",
 	"dependencies": {
 		"commander": "^2.5.1",
 		"dox": "^0.6.1",
