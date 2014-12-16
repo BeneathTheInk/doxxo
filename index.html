@@ -4,7 +4,7 @@
 <head>
   <title>Doxxo</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <link rel="stylesheet" media="all" href="docco.css" />
 </head>
 <body>
@@ -34,10 +34,9 @@
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
               <h1>Doxxo</h1>
-<p>A quick-and-dirty documentation generator inspired by <a href="http://jashkenas.github.com/docco/">Docco</a>. Unlike Docco, Doxxo parses block-level comments to find documentation, leaving inline comments where they belong.</p><p>This file is mostly a direct translation of the <a href="https://github.com/jashkenas/docco/blob/c95b417df9adca5bae029b20ea7499cc28739275/docco.litcoffee">Docco source</a>, which is licensed under MIT.</p><pre><code>Copyright (c) 2009-2013 Jeremy Ashkenas  
-Copyright (c) 2014 Beneath the Ink, Inc.  
+<pre><code>Copyright (c) 2014 Beneath the Ink, Inc.
 MIT License
-</code></pre>
+</code></pre><p>A quick-and-dirty documentation generator inspired by <a href="http://jashkenas.github.com/docco/">Docco</a>. Unlike Docco, Doxxo parses block-level comments to find documentation, leaving inline comments where they belong.</p><p>This file is mostly a direct translation of the <a href="https://github.com/jashkenas/docco/blob/c95b417d/docco.litcoffee">Docco source</a>, which is licensed under MIT and Copyright (c) 2009-2013 Jeremy Ashkenas.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-comment">// dependencies</span>
@@ -72,7 +71,7 @@ MIT License
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <h3>run()</h3>
-<p>This defines the interface that Doxxo uses to run from the command line. Options are parsed using <a href="https://github.com/visionmedia/commander.js">Commander</a> and passed to <code>Doxxo.document()</code>.</p><h4>Arguments</h4>
+<p>This defines the interface that Doxxo uses to run from the command line. Options are parsed using <a href="https://github.com/tj/commander.js">Commander</a> and passed to <code>Doxxo.document()</code>.</p><h4>Arguments</h4>
 <ul>
 <li><strong>args</strong> <em>array; optional</em> - An array of command line arguments to parse for options. Defaults to <code>process.argv</code>.</li>
 </ul>
@@ -111,13 +110,13 @@ MIT License
 <li><strong>options</strong> <em>object; optional</em> - An object of options to configure this run of Doxxo.<ul>
 <li><strong>options.sources</strong> <em>array</em> - An array of paths to JavaScript files, relative to the current working directory.</li>
 <li><strong>options.output</strong> <em>string</em> - The path to a folder that generated files will be saved in.</li>
-<li><strong>options.layout</strong> <em>string</em> - The name of the built-in layout to use. Valid values are <code>parallel</code>, <code>linear</code>, <code>classic</code> or <code>plain-markdown</code>.</li>
+<li><strong>options.layout</strong> <em>string</em> - The name of the built-in layout to use. Valid values are <code>parallel</code>, <code>linear</code>, <code>classic</code>, <code>plain-markdown</code> or <code>bti</code>.</li>
 <li><strong>options.marked</strong> <em>object</em> - Options to configure the markdown parser and renderer.</li>
 <li><strong>options.template</strong> <em>string</em> - A path to an Underscore style template file.</li>
 <li><strong>options.css</strong> <em>string</em> - A path to a CSS file to use for styling.</li>
 </ul>
 </li>
-<li><strong>callback</strong> <em>function; optional</em> - A function that is called when process is complete. If an error occurs, callback will be given the Error object as an argument.</li>
+<li><strong>callback</strong> <em>function; optional</em> - A function that is called when the process is complete. If an error occurs, callback will be given the Error object as an argument.</li>
 </ul>
 
             </div>
@@ -232,7 +231,7 @@ MIT License
 <li><strong>source</strong> <em>string</em> - A path to a JavaScript file.</li>
 <li><strong>sections</strong> <em>array</em> - An array of sections returned from <code>Doxxo.parse()</code>.</li>
 <li><strong>config</strong> <em>object; optional</em> - An object of options to use during formatting.<ul>
-<li><strong>config.marked</strong> <em>object</em> - Options to configure the markdown output. This value is passed directly <code>marked()</code>. The default value is <code>{ smartypants: true }</code>.</li>
+<li><strong>config.marked</strong> <em>object</em> - Options to configure the markdown output. This value is passed directly <code>marked()</code>. The default value is <code>{ smartypants: true, breaks: false }</code>.</li>
 </ul>
 </li>
 </ul>
@@ -240,7 +239,10 @@ MIT License
             </div>
             
             <div class="content"><div class='highlight'><pre>    format: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">format</span><span class="hljs-params">(source, sections, config)</span> </span>{
-        <span class="hljs-keyword">var</span> markedOptions = _.clone(config.marked || { smartypants: <span class="hljs-literal">true</span> });
+        <span class="hljs-keyword">var</span> markedOptions = _.clone(config.marked || {
+            smartypants: <span class="hljs-literal">true</span>,
+            breaks: <span class="hljs-literal">false</span>
+        });
 
         _.defaults(markedOptions, {
             highlight: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(code, lang)</span> </span>{
