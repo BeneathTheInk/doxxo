@@ -1,8 +1,6 @@
 # Doxxo
 
-Doxxo is a quick-and-dirty documentation generator inspired by [Docco](http://jashkenas.github.com/docco/). Unlike Docco, Doxxo parses block-level comments to find documentation.
-
-Doxxo only supports JavaScript at the moment.
+Doxxo is a quick-and-dirty documentation generator inspired by [Docco](http://jashkenas.github.com/docco/). Unlike Docco, Doxxo parses block-level comments to find documentation. Doxxo only supports JavaScript and Markdown at the moment.
 
 Check out [the Doxxo documentation](http://beneaththeink.github.io/doxxo/doxxo.html), produced with Doxxo itself!
 
@@ -23,3 +21,4 @@ Options:
 	-o, --output [path]    use a custom output path
 	-t, --template [file]  use a custom .jst template
 	-m, --marked [file]    use custom marked options
+    -i, --index [file]     mark a file as the index file
