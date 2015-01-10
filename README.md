@@ -4,6 +4,8 @@ Doxxo is a quick-and-dirty documentation generator inspired by [Docco](http://ja
 
 Doxxo only supports JavaScript at the moment.
 
+Check out [the Doxxo documentation](http://beneaththeink.github.io/doxxo/doxxo.html), produced with Doxxo itself!
+
 ## Installation
 
 	npm install -g doxxo

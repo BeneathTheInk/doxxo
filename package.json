@@ -1,6 +1,6 @@
 {
 	"name": "doxxo",
-	"version": "0.1.4",
+	"version": "0.1.5",
 	"description": "A quick-and-dirty documentation generator inspired by Docco.",
 	"author": "Beneath the Ink <info@beneaththeink.com>",
 	"contributors": [
@@ -18,12 +18,12 @@
 		"url": "https://github.com/BeneathTheInk/doxxo.git"
 	},
 	"scripts": {
-		"build-docs": "node ./bin/doxxo ./lib/index.js"
+		"build-docs": "node ./bin/doxxo --index README.md --layout bti lib/doxxo.js README.md"
 	},
 	"bin": {
 		"doxxo": "./bin/doxxo"
 	},
-	"main": "./lib/index.js",
+	"main": "./lib/doxxo.js",
 	"dependencies": {
 		"commander": "^2.5.1",
 		"dox": "^0.6.1",
