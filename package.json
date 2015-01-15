@@ -25,12 +25,12 @@
 	},
 	"main": "./lib/doxxo.js",
 	"dependencies": {
-		"commander": "^2.5.1",
-		"dox": "^0.6.1",
-		"fs-extra": "^0.13.0",
-		"highlight.js": "^8.4.0",
-		"marked": "^0.3.2",
-		"underscore": "^1.7.0"
+		"commander": "~2.6.0",
+		"dox": "~0.6.1",
+		"fs-extra": "~0.14.0",
+		"highlight.js": "~8.4.0",
+		"marked": "~0.3.2",
+		"underscore": "~1.7.0"
 	},
 	"license": "MIT",
 	"keywords": [
