@@ -3,15 +3,16 @@
 // parse CLI arguments
 var argv = require('minimist')(process.argv.slice(2), {
 	string: [ "output", "layout", "template", "index" ],
-	boolean: [ "assets", "silent", "help", "version" ],
+	boolean: [ "assets", "silent", "help", "version", "recursive" ],
 	alias: {
 		h: "help",
-		v: "version",
+		v: "version", V: "version",
 		o: "output",
 		l: "layout",
 		t: "template",
 		i: "index",
-		s: "silent"
+		s: "silent",
+		r: "recursive", R: "recursive"
 	},
 	default: {
 		assets: true,
@@ -40,6 +41,7 @@ if (argv.help || !argv._.length || (argv._.length === 1 && argv._[0] === "help")
 		"    -l, --layout [layout]  use a layout folder or a built-in layout (parallel, linear)",
 		"    -t, --template [file]  use a custom .jst template",
 		"    --no-assets            do not copy layout assets into the output folder",
+		"    -r, --recursive        look in sub-directories for files",
 		"    -i, --index [file]     mark a file as the index file",
 		""
 	].forEach(function(l) {
@@ -53,6 +55,6 @@ if (argv.help || !argv._.length || (argv._.length === 1 && argv._[0] === "help")
 require("bluebird").try(function() {
 	return require("../")(argv._, argv);
 }).catch(function(e) {
-	console.error(e.stack || e.toString());
+	console.error(e.toString());
 	process.exit(1);
 });
