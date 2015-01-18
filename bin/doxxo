@@ -1,24 +1,51 @@
 #!/usr/bin/env node
 
-var Promise = require("bluebird");
-
 // parse CLI
 var argv = require('minimist')(process.argv.slice(2), {
 	string: [ "output", "layout", "template", "index" ],
-	boolean: [ "silent" ],
+	boolean: [ "silent", "help", "version" ],
 	alias: {
 		o: "output",
 		l: "layout",
 		t: "template",
-		i: "index"
+		i: "index",
+		h: "help",
+		v: "version"
 	},
 	defaults: {
 		silent: false
 	}
 });
 
+if (argv.version) {
+	var pkg = require("../package.json");
+	console.log("%s v%s", pkg.name, pkg.version);
+	process.exit(0);
+}
+
+if (argv.help || !argv._.length || (argv._.length === 1 && argv._[0] === "help")) {
+	[
+		"",
+		"  Usage: doxxo [options] FILES",
+		"",
+		"  Options:",
+		"",
+		"    -h, --help             output usage information",
+		"    -v, --version          output the version number",
+		"    -o, --output [path]    use a custom output path",
+		"    -l, --layout [layout]  use a layout folder or a built-in layout (parallel, linear)",
+		"    -t, --template [file]  use a custom .jst template",
+		"    -i, --index [file]     mark a file as the index file",
+		""
+	].forEach(function(l) {
+		console.log(l);
+	});
+
+	process.exit(0);
+}
+
 // run doxxo
-Promise.try(function() {
+require("bluebird").try(function() {
 	return require("../")(argv._, argv);
 }).catch(function(e) {
 	console.error(e.stack || e.toString());
