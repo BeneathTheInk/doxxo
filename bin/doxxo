@@ -1,6 +1,26 @@
 #!/usr/bin/env node
 
-var path = require('path');
-var fs = require('fs');
-var dir = path.join(path.dirname(fs.realpathSync(__filename)), '../');
-require(dir).run();
+var Promise = require("bluebird");
+
+// parse CLI
+var argv = require('minimist')(process.argv.slice(2), {
+	string: [ "output", "layout", "template", "index" ],
+	boolean: [ "silent" ],
+	alias: {
+		o: "output",
+		l: "layout",
+		t: "template",
+		i: "index"
+	},
+	defaults: {
+		silent: false
+	}
+});
+
+// run doxxo
+Promise.try(function() {
+	return require("../")(argv._, argv);
+}).catch(function(e) {
+	console.error(e.stack || e.toString());
+	process.exit(1);
+});

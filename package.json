@@ -25,11 +25,14 @@
 	},
 	"main": "./lib/doxxo.js",
 	"dependencies": {
-		"commander": "~2.6.0",
+		"bluebird": "^2.7.1",
+		"commondir": "0.0.1",
+		"cpr": "^0.3.2",
 		"dox": "~0.6.1",
-		"fs-extra": "~0.14.0",
 		"highlight.js": "~8.4.0",
 		"marked": "~0.3.2",
+		"minimist": "^1.1.0",
+		"mkdirp": "^0.5.0",
 		"underscore": "~1.7.0"
 	},
 	"license": "MIT",
