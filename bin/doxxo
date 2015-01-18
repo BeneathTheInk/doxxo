@@ -1,28 +1,32 @@
 #!/usr/bin/env node
 
-// parse CLI
+// parse CLI arguments
 var argv = require('minimist')(process.argv.slice(2), {
 	string: [ "output", "layout", "template", "index" ],
-	boolean: [ "silent", "help", "version" ],
+	boolean: [ "assets", "silent", "help", "version" ],
 	alias: {
+		h: "help",
+		v: "version",
 		o: "output",
 		l: "layout",
 		t: "template",
 		i: "index",
-		h: "help",
-		v: "version"
+		s: "silent"
 	},
-	defaults: {
+	default: {
+		assets: true,
 		silent: false
 	}
 });
 
+// version message
 if (argv.version) {
 	var pkg = require("../package.json");
 	console.log("%s v%s", pkg.name, pkg.version);
 	process.exit(0);
 }
 
+// help message
 if (argv.help || !argv._.length || (argv._.length === 1 && argv._[0] === "help")) {
 	[
 		"",
@@ -32,9 +36,10 @@ if (argv.help || !argv._.length || (argv._.length === 1 && argv._[0] === "help")
 		"",
 		"    -h, --help             output usage information",
 		"    -v, --version          output the version number",
-		"    -o, --output [path]    use a custom output path",
+		"    -o, --output [path]    use a custom output path (default: 'docs')",
 		"    -l, --layout [layout]  use a layout folder or a built-in layout (parallel, linear)",
 		"    -t, --template [file]  use a custom .jst template",
+		"    --no-assets            do not copy layout assets into the output folder",
 		"    -i, --index [file]     mark a file as the index file",
 		""
 	].forEach(function(l) {
