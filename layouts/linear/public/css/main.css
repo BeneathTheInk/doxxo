@@ -2,40 +2,40 @@
 
 @font-face {
     font-family: 'aller-light';
-    src: url('public/fonts/aller-light.eot');
-    src: url('public/fonts/aller-light.eot?#iefix') format('embedded-opentype'),
-         url('public/fonts/aller-light.woff') format('woff'),
-         url('public/fonts/aller-light.ttf') format('truetype');
+    src: url('../fonts/aller-light.eot');
+    src: url('../fonts/aller-light.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/aller-light.woff') format('woff'),
+         url('../fonts/aller-light.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'aller-bold';
-    src: url('public/fonts/aller-bold.eot');
-    src: url('public/fonts/aller-bold.eot?#iefix') format('embedded-opentype'),
-         url('public/fonts/aller-bold.woff') format('woff'),
-         url('public/fonts/aller-bold.ttf') format('truetype');
+    src: url('../fonts/aller-bold.eot');
+    src: url('../fonts/aller-bold.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/aller-bold.woff') format('woff'),
+         url('../fonts/aller-bold.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'novecento-bold';
-    src: url('public/fonts/novecento-bold.eot');
-    src: url('public/fonts/novecento-bold.eot?#iefix') format('embedded-opentype'),
-         url('public/fonts/novecento-bold.woff') format('woff'),
-         url('public/fonts/novecento-bold.ttf') format('truetype');
+    src: url('../fonts/novecento-bold.eot');
+    src: url('../fonts/novecento-bold.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/novecento-bold.woff') format('woff'),
+         url('../fonts/novecento-bold.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'fleurons';
-    src: url('public/fonts/fleurons.eot');
-    src: url('public/fonts/fleurons.eot?#iefix') format('embedded-opentype'),
-         url('public/fonts/fleurons.woff') format('woff'),
-         url('public/fonts/fleurons.ttf') format('truetype');
+    src: url('../fonts/fleurons.eot');
+    src: url('../fonts/fleurons.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/fleurons.woff') format('woff'),
+         url('../fonts/fleurons.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -44,7 +44,7 @@
 
 body {
   font-family: "aller-light";
-  background: url('public/images/gray.png') #fff;
+  background: url('../images/gray.png') #fff;
   background-size: 322px;
   margin: 0;
 }

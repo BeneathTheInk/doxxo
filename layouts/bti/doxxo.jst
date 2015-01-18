@@ -20,7 +20,7 @@
             <div id="jump_page">
               <% for (var i=0, l=sources.length; i<l; i++) { %>
                 <% var source = sources[i]; %>
-                <a class="source" href="<%= destination(source.out) %>">
+                <a class="source" href="<%= destination(source) %>">
                   <%= source.name %>
                 </a>
               <% } %>
