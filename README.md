@@ -6,15 +6,17 @@ Check out [the Doxxo documentation](http://beneaththeink.github.io/doxxo/doxxo.h
 
 ## Installation
 
-	npm install -g doxxo
+	$ npm install -g doxxo
 
 ## Usage
 
-	Usage: doxxo [options] FILES
+	Usage:
 
-	FILES can be any .js or .md source file or a directory containing .js or .md
-	files. Directories are only traversed a single level, unless the --recursive
-	flag is enabled.
+		$ doxxo [OPTIONS] FILES...
+
+		FILES can be any .js or .md source file or a directory containing .js or
+		.md files. Directories are only traversed a single level, unless the
+		--recursive flag is enabled.
 
 	Options:
 
