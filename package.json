@@ -18,7 +18,7 @@
 		"url": "https://github.com/BeneathTheInk/doxxo.git"
 	},
 	"scripts": {
-		"build-docs": "node ./bin/doxxo --index README.md --layout bti lib/doxxo.js README.md"
+		"build-docs": "node ./bin/doxxo -i README.md README.md lib/"
 	},
 	"bin": {
 		"doxxo": "./bin/doxxo"
