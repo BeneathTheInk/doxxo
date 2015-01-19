@@ -5,7 +5,7 @@
   <title>Doxxo</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-  <link rel="stylesheet" media="all" href="docco.css" />
+  <link rel="stylesheet" media="all" href="public/main.css" />
 </head>
 <body>
   <div id="container">
@@ -41,11 +41,26 @@
         <li id="section-1">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h1">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              
+              <h1>Doxxo</h1>
+<pre><code>Copyright (c) 2015 Beneath the Ink, Inc.
+MIT License
+</code></pre><p>A documentation generator inspired by <a href="http://jashkenas.github.com/docco/">Docco</a>. Doxxo parses block-level comments in JavaScript code to find documentation and parses them as markdown.</p>
             </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">// dependencies</span>
+<span class="hljs-keyword">var</span> _ = <span class="hljs-built_in">require</span>(<span class="hljs-string">'underscore'</span>),
+    Promise = <span class="hljs-built_in">require</span>(<span class="hljs-string">"bluebird"</span>),
+    fs = Promise.promisifyAll(<span class="hljs-built_in">require</span>(<span class="hljs-string">"fs"</span>)),
+    cpr = Promise.promisify(<span class="hljs-built_in">require</span>(<span class="hljs-string">'cpr'</span>)),
+    path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>),
+    marked = <span class="hljs-built_in">require</span>(<span class="hljs-string">'marked'</span>),
+    highlightjs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'highlight.js'</span>),
+    dox = <span class="hljs-built_in">require</span>(<span class="hljs-string">"dox"</span>),
+    commondir = <span class="hljs-built_in">require</span>(<span class="hljs-string">'commondir'</span>),
+    mkdirp = Promise.promisify(<span class="hljs-built_in">require</span>(<span class="hljs-string">"mkdirp"</span>));</pre></div></div>
             
         </li>
         
@@ -53,37 +68,58 @@
         <li id="section-2">
             <div class="annotation">
               
-              <div class="pilwrap for-h1">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <h1>Doxxo</h1>
-<pre><code>Copyright (c) 2014 Beneath the Ink, Inc.
-MIT License
-</code></pre><p>A quick-and-dirty documentation generator inspired by <a href="http://jashkenas.github.com/docco/">Docco</a>. Unlike Docco, Doxxo parses block-level comments to find documentation, leaving inline comments where they belong.</p><p>This file is mostly a direct translation of the <a href="https://github.com/jashkenas/docco/blob/c95b417d/docco.litcoffee">Docco source</a>, which is licensed under MIT and Copyright (c) 2009-2013 Jeremy Ashkenas.</p>
+              <h2>Basic Usage</h2>
+<p>While Doxxo was designed as a CLI tool, it can also be used as a Node.js module. To use Doxxo, pass it a list of source paths, some options and a function to call when it is finished. Doxxo also returns a valid Promise object (powered by <a href="https://www.npmjs.com/package/bluebird">bluebird</a>) if that is more your style.</p><pre><code class="lang-javascript"><span class="hljs-keyword">var</span> doxxo = <span class="hljs-built_in">require</span>(<span class="hljs-string">"doxxo"</span>);
+
+doxxo([ <span class="hljs-string">"lib/"</span>, <span class="hljs-string">"test/"</span>, <span class="hljs-string">"README.md"</span> ], {
+  layout: <span class="hljs-string">"linear"</span>,
+  index: <span class="hljs-string">"README.md"</span>
+}, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err)</span> </span>{
+  <span class="hljs-keyword">if</span> (err) <span class="hljs-built_in">console</span>.error(err);
+});
+</code></pre>
+<p>Doxxo also happens to be a constructor for a JavaScript class, giving you a bit more control over how the documentation process happens. Usage is also the same as above, with the exception that the operation is not asynchronous and returns a new Doxxo object instead. For reference, here is the code above rewritten with the class:</p><pre><code class="lang-javascript"><span class="hljs-keyword">var</span> Doxxo = <span class="hljs-built_in">require</span>(<span class="hljs-string">"doxxo"</span>);
+
+<span class="hljs-keyword">var</span> docs = <span class="hljs-keyword">new</span> Doxxo([ <span class="hljs-string">"lib/"</span>, <span class="hljs-string">"test/"</span>, <span class="hljs-string">"README.md"</span> ], {
+  layout: <span class="hljs-string">"linear"</span>,
+  index: <span class="hljs-string">"README.md"</span>
+});
+
+docs.document(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err)</span> </span>{
+  <span class="hljs-keyword">if</span> (err) <span class="hljs-built_in">console</span>.error(err);
+});
+</code></pre>
+<h4>Arguments</h4>
+<ul>
+<li><strong>paths</strong> <em>string | array[string]</em> - A path or array of paths for source files and directories.</li>
+<li><strong>opts</strong> <em>object; optional</em> - An object of options to dictate the documentation process. See below for valid options.</li>
+<li><strong>callback</strong> <em>function; optional</em> - A function that is called when the documentation process completes.</li>
+</ul>
+
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-comment">// dependencies</span>
-<span class="hljs-keyword">var</span> _ = <span class="hljs-built_in">require</span>(<span class="hljs-string">'underscore'</span>),
-    fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs-extra'</span>),
-    path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>),
-    marked = <span class="hljs-built_in">require</span>(<span class="hljs-string">'marked'</span>),
-    commander = <span class="hljs-built_in">require</span>(<span class="hljs-string">'commander'</span>),
-    highlightjs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'highlight.js'</span>),
-    dox = <span class="hljs-built_in">require</span>(<span class="hljs-string">"dox"</span>);
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> Doxxo =
+<span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(paths, opts, callback)</span> </span>{
+    <span class="hljs-comment">// the fast, easy way to run doxxo</span>
+    <span class="hljs-keyword">if</span> (!(<span class="hljs-keyword">this</span> <span class="hljs-keyword">instanceof</span> Doxxo)) {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Doxxo(paths, opts).document(callback);
+    }
 
-<span class="hljs-comment">// default option values</span>
-<span class="hljs-keyword">var</span> defaults = {
-    layout:     <span class="hljs-string">'parallel'</span>,
-    output:     <span class="hljs-string">'docs'</span>,
-    template:   <span class="hljs-literal">null</span>,
-    css:        <span class="hljs-literal">null</span>,
-    marked:     <span class="hljs-literal">null</span>,
-    index:      <span class="hljs-literal">null</span>
-};
+    <span class="hljs-comment">// normalize paths argument</span>
+    paths = !_.isArray(paths) ? paths != <span class="hljs-literal">null</span> ? [ paths ] : [] : paths;
 
-<span class="hljs-comment">// export all the methods</span>
-<span class="hljs-keyword">var</span> Doxxo = <span class="hljs-built_in">module</span>.exports = {
-    version: <span class="hljs-built_in">require</span>(<span class="hljs-string">'../package.json'</span>).version,</pre></div></div>
+    <span class="hljs-comment">// prep options</span>
+    <span class="hljs-keyword">this</span>.options = Doxxo.configure(opts);
+
+    <span class="hljs-comment">// convert paths array into source objects</span>
+    <span class="hljs-keyword">this</span>.sources = Doxxo.resolveSources(paths, <span class="hljs-keyword">this</span>.options);
+
+    <span class="hljs-comment">// must have at least one source</span>
+    <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.sources.length) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"No valid sources provided."</span>);
+}</pre></div></div>
             
         </li>
         
@@ -91,34 +127,49 @@ MIT License
         <li id="section-3">
             <div class="annotation">
               
-              <div class="pilwrap for-h3">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <h3>run()</h3>
-<p>This defines the interface that Doxxo uses to run from the command line. Options are parsed using <a href="https://github.com/tj/commander.js">Commander</a> and passed to <code>Doxxo.document()</code>.</p><h4>Arguments</h4>
-<ul>
-<li><strong>args</strong> <em>array; optional</em> - An array of command line arguments to parse for options. Defaults to <code>process.argv</code>.</li>
+              <h2>Configuration</h2>
+<p>Everything Doxxo does depends on the options provided, so a major portion of Doxxo&#39;s source code has been dedicated to configuration. Here are the available options:</p><ul>
+<li><strong>opts.output</strong> <em>string; default: <code>&#39;docs/&#39;</code></em> - The output directory to write documentation files too.</li>
+<li><strong>opts.layout</strong> <em>string; default: <code>&#39;bti&#39;</code></em> - The layout to use for generating documentation. This can be the name of a built-in layout or a file path to a layout directory.</li>
+<li><strong>opts.template</strong> <em>string; default: <code>&#39;doxxo.jst&#39;</code></em> - The HTML template file to use for generating documentation. This should be a path that is relative to the layout directory.</li>
+<li><strong>opts.assets</strong> <em>boolean; default: <code>true</code></em> - A flag that decides if the layout&#39;s asset files should be copied into the output folder.</li>
+<li><strong>opts.index</strong> <em>string | null</em> - A file that should be the index file. This file will named &#39;index.html&#39; in the output.</li>
+<li><strong>opts.silent</strong> <em>boolean; default: <code>true</code></em> - When set to <code>false</code>, Doxxo will log when things happen like the CLI tool does.</li>
+<li><strong>opts.recursive</strong> <em>boolean; default: <code>false</code></em> - Whether or not to deeply look for documentable files in the source directories provided. This will maintain the deep folder structure to prevent filename collisions.</li>
+<li><strong>opts.marked</strong> <em>object</em> - An object of options to pass to <a href="https://www.npmjs.com/package/marked">marked</a>, our Markdown converter.</li>
 </ul>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    run: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">run</span><span class="hljs-params">(args)</span> </span>{
-        args = args || process.argv;
-        
-        commander.version(Doxxo.version)
-            .usage(<span class="hljs-string">'[options] files'</span>)
-            .option(<span class="hljs-string">'-l, --layout [name]'</span>,    <span class="hljs-string">'choose a layout (parallel, linear or classic)'</span>, defaults.layout)
-            .option(<span class="hljs-string">'-o, --output [path]'</span>,    <span class="hljs-string">'output to a given folder'</span>, defaults.output)
-            .option(<span class="hljs-string">'-c, --css [file]'</span>,       <span class="hljs-string">'use a custom css file'</span>, defaults.css)
-            .option(<span class="hljs-string">'-t, --template [file]'</span>,  <span class="hljs-string">'use a custom .jst template'</span>, defaults.template)
-            .option(<span class="hljs-string">'-m, --marked [file]'</span>,    <span class="hljs-string">'use custom marked options'</span>, defaults.marked)
-            .option(<span class="hljs-string">'-i, --index [file]'</span>,     <span class="hljs-string">'mark a file as the index file'</span>, defaults.index)
-            .parse(args)
-            .name = <span class="hljs-string">"doxxo"</span>
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">// obtain built-in layouts directory and names</span>
+<span class="hljs-keyword">var</span> cwd = process.cwd(),
+    layout_dir = path.resolve(__dirname, <span class="hljs-string">"../layouts"</span>),
+    layouts = fs.readdirSync(layout_dir);
 
-        <span class="hljs-keyword">if</span> (commander.args.length) Doxxo.document(commander);
-        <span class="hljs-keyword">else</span> <span class="hljs-built_in">console</span>.log(commander.helpInformation());
-    },</pre></div></div>
+<span class="hljs-comment">// base defaults</span>
+Doxxo.defaults = {
+    output: <span class="hljs-string">"docs"</span>,
+    layout: <span class="hljs-string">"bti"</span>,
+    template: <span class="hljs-string">"doxxo.jst"</span>,
+    assets: <span class="hljs-literal">true</span>,
+    index: <span class="hljs-literal">null</span>,
+    silent: <span class="hljs-literal">true</span>,
+    recursive: <span class="hljs-literal">false</span>,
+    marked: {
+        smartypants: <span class="hljs-literal">false</span>,
+        breaks: <span class="hljs-literal">false</span>,
+        highlight: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(code, lang)</span> </span>{
+            <span class="hljs-keyword">if</span> (highlightjs.getLanguage(lang)) {
+                <span class="hljs-keyword">return</span> highlightjs.highlight(lang, code).value;
+            } <span class="hljs-keyword">else</span> {
+                <span class="hljs-keyword">return</span> code;
+            }
+        }
+    }
+}</pre></div></div>
             
         </li>
         
@@ -126,70 +177,26 @@ MIT License
         <li id="section-4">
             <div class="annotation">
               
-              <div class="pilwrap for-h3">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <h3>document()</h3>
-<p>Generates the documentation for our configured source file by copying over static assets, reading all the source files in, splitting them up into prose+code sections, highlighting each file, and printing them out in an HTML template.</p><h4>Arguments</h4>
-<ul>
-<li><strong>options</strong> <em>object; optional</em> - An object of options to configure this run of Doxxo.<ul>
-<li><strong>options.sources</strong> <em>array</em> - An array of paths to JavaScript files, relative to the current working directory.</li>
-<li><strong>options.output</strong> <em>string</em> - The path to a folder that generated files will be saved in.</li>
-<li><strong>options.layout</strong> <em>string</em> - The name of the built-in layout to use. Valid values are <code>parallel</code>, <code>linear</code>, <code>classic</code>, <code>plain-markdown</code> or <code>bti</code>.</li>
-<li><strong>options.marked</strong> <em>object</em> - Options to configure the markdown parser and renderer.</li>
-<li><strong>options.template</strong> <em>string</em> - A path to an Underscore style template file.</li>
-<li><strong>options.css</strong> <em>string</em> - A path to a CSS file to use for styling.</li>
-</ul>
-</li>
-<li><strong>callback</strong> <em>function; optional</em> - A function that is called when the process is complete. If an error occurs, callback will be given the Error object as an argument.</li>
-</ul>
-
+              <p><code>Doxxo.configure()</code> takes in user input for options, which should be an object or undefined, and normalizes it into something that can be used by the rest of the application. This is a key step because it prevents other functions from needing to test for certain values before using them.</p>
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-built_in">document</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">document</span><span class="hljs-params">(options, callback)</span> </span>{
-        <span class="hljs-keyword">var</span> config = Doxxo.configure(options || {});
-
-        fs.mkdirs(config.output, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
-            <span class="hljs-keyword">if</span> (callback == <span class="hljs-literal">null</span>) {
-                callback = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err)</span> </span>{ <span class="hljs-keyword">if</span> (err) <span class="hljs-keyword">throw</span> err; }
-            }
-
-            <span class="hljs-keyword">var</span> files = config.sources.slice();
-            nextFile();
-            
-            <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">copyAsset</span><span class="hljs-params">(file, callback)</span> </span>{
-                <span class="hljs-keyword">if</span> (!fs.existsSync(file)) <span class="hljs-keyword">return</span> callback();
-                fs.copy(file, path.join(config.output, path.basename(file)), callback);
-            }
-            
-            <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">complete</span><span class="hljs-params">()</span> </span>{
-                copyAsset(config.css, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(error)</span> </span>{
-                    <span class="hljs-keyword">if</span> (error) <span class="hljs-keyword">return</span> callback(error);
-                    <span class="hljs-keyword">if</span> (fs.existsSync(config.public)) <span class="hljs-keyword">return</span> copyAsset(config.public, callback);
-                    callback();
-                });
-            }
-
-            <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">nextFile</span><span class="hljs-params">()</span> </span>{
-                <span class="hljs-keyword">var</span> source = files.shift();
-
-                fs.readFile(source, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(error, buffer)</span> </span>{
-                    <span class="hljs-keyword">if</span> (error) <span class="hljs-keyword">return</span> callback(error);
-
-                    <span class="hljs-keyword">var</span> code = buffer.toString();
-                    <span class="hljs-keyword">var</span> sections = Doxxo.parse(source, code, config);
-                    
-                    <span class="hljs-keyword">if</span> (sections.length) {
-                        Doxxo.format(source, sections, config);
-                        Doxxo.write(source, sections, config);
-                    }
-                    
-                    <span class="hljs-keyword">if</span> (files.length) nextFile();
-                    <span class="hljs-keyword">else</span> complete();
-                });
-            }
-        });
-    },</pre></div></div>
+            <div class="content"><div class='highlight'><pre>Doxxo.configure = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(opts)</span> </span>{
+    opts = _.defaults(opts ? _.clone(opts) : {}, Doxxo.defaults);
+    opts.output = path.resolve(opts.output);
+    opts.index = opts.index &amp;&amp; path.resolve(opts.index);
+    opts.layout = Doxxo.resolveLayout(opts.layout);
+    opts.template = Doxxo.resolveTemplate(opts.layout, opts.template);
+    opts.log = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">if</span> (opts.silent) <span class="hljs-keyword">return</span>;
+        <span class="hljs-keyword">var</span> args = _.toArray(<span class="hljs-built_in">arguments</span>);
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> args[<span class="hljs-number">0</span>] === <span class="hljs-string">"string"</span>) args[<span class="hljs-number">0</span>] = <span class="hljs-string">"doxxo: "</span> + args[<span class="hljs-number">0</span>];
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">console</span>.log.apply(<span class="hljs-built_in">console</span>, args);
+    }
+    <span class="hljs-keyword">return</span> opts;
+}</pre></div></div>
             
         </li>
         
@@ -197,72 +204,24 @@ MIT License
         <li id="section-5">
             <div class="annotation">
               
-              <div class="pilwrap for-h3">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <h3>parse()</h3>
-<p>Given a string of source code, parse out each block-level comment and the code that follows it. This is accomplished using <a href="https://github.com/tj/dox">Dox</a>. An individual <em>section</em> is created for each comment and code. Each section is an object with <code>docsText</code> and <code>codeText</code> properties, and eventually <code>docsHtml</code> and <code>codeHtml</code> as well.</p><h4>Arguments</h4>
-<ul>
-<li><strong>source</strong> <em>string</em> - A path to a JavaScript file.</li>
-<li><strong>code</strong> <em>string</em> - A chunk of raw JavaScript source code.</li>
-</ul>
-
+              <p>Layouts can be specified with either a built-in name or a directory path. Regardless of which is provided, <code>Doxxo.resolveLayout()</code> converts the user input into a directory path so every layout can be treated the same.</p>
             </div>
             
-            <div class="content"><div class='highlight'><pre>    parse: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parse</span><span class="hljs-params">(source, code)</span> </span>{
-        <span class="hljs-keyword">var</span> ext = path.extname(source)
-            sections = [];
+            <div class="content"><div class='highlight'><pre>Doxxo.resolveLayout = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(layout)</span> </span>{
+    <span class="hljs-comment">// look for built-in layout</span>
+    <span class="hljs-keyword">if</span> (_.contains(layouts, layout)) <span class="hljs-keyword">return</span> path.join(layout_dir, layout);
 
-        <span class="hljs-keyword">switch</span> (ext) {
-            <span class="hljs-keyword">case</span> <span class="hljs-string">".js"</span>:
-                <span class="hljs-keyword">var</span> comments = dox.parseComments(code, { raw: <span class="hljs-literal">true</span> });
-                <span class="hljs-keyword">if</span> (!comments.length) <span class="hljs-keyword">return</span> sections;
+    <span class="hljs-comment">// look up as the name of a folder</span>
+    <span class="hljs-keyword">try</span> {
+        <span class="hljs-keyword">var</span> fpath = path.resolve(layout);
+        <span class="hljs-keyword">if</span> (fs.statSync(fpath).isDirectory()) <span class="hljs-keyword">return</span> fpath;
+    } <span class="hljs-keyword">catch</span>(e) {}
 
-                <span class="hljs-keyword">var</span> lines = code.split(<span class="hljs-string">"\n"</span>);
-
-                sections = [{
-                    codeText: lines.slice(<span class="hljs-number">0</span>, comments[<span class="hljs-number">0</span>].line - <span class="hljs-number">1</span>).join(<span class="hljs-string">'\n'</span>),
-                    docsText: <span class="hljs-string">''</span>
-                }];
-
-                <span class="hljs-keyword">var</span> comment, nextComment, codeEnd, code;
-
-                <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; comments.length; i++) {
-                    comment = comments[i];
-                    nextComment = comments[i + <span class="hljs-number">1</span>];
-                    codeEnd = nextComment != <span class="hljs-literal">null</span> ? nextComment.line - <span class="hljs-number">1</span> : lines.length;
-                    code = lines.slice(comment.codeStart - <span class="hljs-number">1</span>, codeEnd);
-
-                    <span class="hljs-comment">// replace tabs with 4 spaces</span>
-                    code = code.map(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(line)</span> </span>{
-                        <span class="hljs-keyword">return</span> line.replace(<span class="hljs-regexp">/^\t+/</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(m)</span> </span>{
-                            <span class="hljs-keyword">return</span> _.times(m.length, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">"    "</span>; }).join(<span class="hljs-string">""</span>);
-                        });
-                    });
-
-                    sections.push({
-                        docsText: comment.description.full,
-                        codeText: code.join(<span class="hljs-string">"\n"</span>)
-                    });
-                }
-
-                <span class="hljs-keyword">break</span>;
-
-            <span class="hljs-keyword">case</span> <span class="hljs-string">".md"</span>:
-            <span class="hljs-keyword">case</span> <span class="hljs-string">".markdown"</span>:
-                sections = [{
-                    codeText: <span class="hljs-string">""</span>,
-                    docsText: code
-                }];
-
-                <span class="hljs-keyword">break</span>;
-
-            <span class="hljs-keyword">default</span>:
-                <span class="hljs-built_in">console</span>.warn(<span class="hljs-string">"Unsupported file type: '%s'"</span>, ext);
-        }
-
-        <span class="hljs-keyword">return</span> sections;
-    },</pre></div></div>
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"Not a valid layout: '"</span> + layout + <span class="hljs-string">"'"</span>);
+}</pre></div></div>
             
         </li>
         
@@ -270,45 +229,25 @@ MIT License
         <li id="section-6">
             <div class="annotation">
               
-              <div class="pilwrap for-h3">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <h3>format()</h3>
-<p>Parsed sections of code are sent here to be formatted and highlighted. <a href="https://highlightjs.org">Highlight.js</a> is used to highlight the code and the corresponding comments are run through Markdown, using <a href="https://github.com/chjj/marked">Marked</a>.</p><h4>Arguments</h4>
-<ul>
-<li><strong>source</strong> <em>string</em> - A path to a JavaScript file.</li>
-<li><strong>sections</strong> <em>array</em> - An array of sections returned from <code>Doxxo.parse()</code>.</li>
-<li><strong>config</strong> <em>object; optional</em> - An object of options to use during formatting.<ul>
-<li><strong>config.marked</strong> <em>object</em> - Options to configure the markdown output. This value is passed directly <code>marked()</code>. The default value is <code>{ smartypants: true, breaks: false }</code>.</li>
-</ul>
-</li>
-</ul>
-
+              <p><code>Doxxo.resolveTemplate()</code> extracts the template from the layout directory and converts it into a function using <a href="http://underscorejs.org/#template">Underscore templating</a>. In this way, Docco templates are semi-compatible with Doxxo since they use the same format.</p>
             </div>
             
-            <div class="content"><div class='highlight'><pre>    format: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">format</span><span class="hljs-params">(source, sections, config)</span> </span>{
-        <span class="hljs-keyword">var</span> markedOptions = _.clone(config.marked || {
-            smartypants: <span class="hljs-literal">true</span>,
-            breaks: <span class="hljs-literal">false</span>
-        });
+            <div class="content"><div class='highlight'><pre>Doxxo.resolveTemplate = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(dir, template)</span> </span>{
+    <span class="hljs-keyword">var</span> fpath = path.resolve(dir, template),
+        valid = <span class="hljs-literal">false</span>;
 
-        _.defaults(markedOptions, {
-            highlight: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(code, lang)</span> </span>{
-                <span class="hljs-keyword">if</span> (highlightjs.getLanguage(lang)) {
-                    <span class="hljs-keyword">return</span> highlightjs.highlight(lang, code).value;
-                } <span class="hljs-keyword">else</span> {
-                    <span class="hljs-keyword">return</span> code;
-                }
-            }
-        });
+    <span class="hljs-keyword">try</span> { valid = fs.statSync(fpath).isFile(); }
+    <span class="hljs-keyword">catch</span>(e) {}
 
-        _.each(sections, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(section)</span> </span>{
-            <span class="hljs-keyword">var</span> code = highlightjs.highlight(<span class="hljs-string">"javascript"</span>, section.codeText).value;
-            code = code.replace(<span class="hljs-regexp">/\s+$/</span>, <span class="hljs-string">''</span>);
-            section.codeHtml = <span class="hljs-string">"&lt;div class='highlight'&gt;&lt;pre&gt;"</span> + code + <span class="hljs-string">"&lt;/pre&gt;&lt;/div&gt;"</span>;
-            section.docsHtml = marked(section.docsText, markedOptions);
-        });
-    },</pre></div></div>
+    <span class="hljs-keyword">if</span> (!valid) {
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"Template file '"</span> + template + <span class="hljs-string">"' is missing."</span>);
+    }
+
+    <span class="hljs-keyword">return</span> _.template(fs.readFileSync(fpath, <span class="hljs-string">"utf-8"</span>));
+}</pre></div></div>
             
         </li>
         
@@ -316,54 +255,49 @@ MIT License
         <li id="section-7">
             <div class="annotation">
               
-              <div class="pilwrap for-h3">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <h3>write()</h3>
-<p>Once all of the code has finished highlighting, the resulting documentation file is written by passing the completed HTML sections into the template, and rendering it to the specified output path.</p><p>The title of the file is either the first heading in the prose, or the name of the source file.</p><h4>Arguments</h4>
+              <h2>Resolving Source Files</h2>
+<p>Using Doxxo is simple to use because a lot of the magic happens when dealing with the file paths. A key aspect of Doxxo is taking the user provided relative paths and determining where their documentation counterparts should be saved. This requires using a blend of the current working directory and the output directory to generate the correct paths and can get especially tricky when dealing with deep file trees.</p><p><code>Doxxo.resolveSource()</code> will produce a unique array of source file objects from a list of file paths. Source objects serve as a representation of a specific file including details like the resulting output path. These source objects have several properties that are detailed below.</p><h4>Arguments</h4>
 <ul>
-<li><strong>source</strong> <em>string</em> - A path to a JavaScript file.</li>
-<li><strong>sections</strong> <em>array</em> - An array of sections returned from <code>Doxxo.parse()</code>.</li>
-<li><strong>config</strong> <em>object; optional</em> - An object of options to use during writing.<ul>
-<li><strong>config.output</strong> <em>string</em> - The path to a folder, relative to the current working directory, that generated files will be saved to.</li>
-<li><strong>config.template</strong> <em>function</em> - A function that should produce HTML when executed. It is given various data needed to generate the content. Follows the same API as functions outputted from <code>_.template()</code>.</li>
-<li><strong>config.css</strong> <em>string</em> - The name of the css file to reference in the HTML <code>&lt;head&gt;</code>.</li>
+<li><strong>paths</strong> <em>array</em> - An array of file paths.</li>
+<li><strong>opts</strong> <em>object; optional</em> - An object of options, usually whatever comes out of <code>Doxxo.configure()</code>.<ul>
+<li><strong>opts.recursive</strong> <em>boolean</em> - Whether or not deeply traverse all directories for source files.</li>
+<li><strong>opts.output</strong> <em>string</em> - The documentation output directory.</li>
+<li><strong>opts.index</strong> <em>string | null</em> - The file to use as the index. This file will out to <code>index.html</code> instead of a variety of its name.</li>
 </ul>
 </li>
 </ul>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    write: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">write</span><span class="hljs-params">(source, sections, config)</span> </span>{
-        <span class="hljs-keyword">var</span> firstSection, first, hasTitle, html;
+            <div class="content"><div class='highlight'><pre>Doxxo.resolveSources = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(paths, opts)</span> </span>{
+    opts = opts || {};
 
-        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">destination</span><span class="hljs-params">(file)</span> </span>{
-            <span class="hljs-keyword">return</span> path.join(config.output, (
-                file === config.index ? <span class="hljs-string">"index"</span> :
-                path.basename(file, path.extname(file))
-            ) + <span class="hljs-string">'.html'</span>);
+    <span class="hljs-comment">// clean paths</span>
+    paths = Doxxo.cleanPaths(paths, opts.recursive);
+
+    <span class="hljs-comment">// obtain the common directory</span>
+    <span class="hljs-keyword">var</span> common = commondir(<span class="hljs-string">"/"</span>, _.values(paths)).substr(<span class="hljs-number">1</span>);
+    
+    <span class="hljs-comment">// return an array of source objects</span>
+    <span class="hljs-keyword">return</span> _.map(paths, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(src, fp)</span> </span>{
+        <span class="hljs-keyword">var</span> isIndex, outpath;
+
+        <span class="hljs-comment">// check index, remove common directory, remove extension</span>
+        outpath = (isIndex = fp === opts.index) ? <span class="hljs-string">"index"</span> :
+            src.substr(<span class="hljs-number">0</span>, src.length - path.extname(src).length).substr(common.length);
+
+        <span class="hljs-comment">// return a source object</span>
+        <span class="hljs-keyword">return</span> {
+            full: fp,
+            out: path.join(opts.output, outpath + <span class="hljs-string">".html"</span>),
+            name: src,
+            isIndex: isIndex
         }
-
-        firstSection = _.find(sections, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(section)</span> </span>{
-            <span class="hljs-keyword">return</span> section.docsText.length &gt; <span class="hljs-number">0</span>
-        });
-
-        <span class="hljs-keyword">if</span> (firstSection) first = marked.lexer(firstSection.docsText)[<span class="hljs-number">0</span>];
-        hasTitle = first &amp;&amp; first.type === <span class="hljs-string">'heading'</span> &amp;&amp; first.depth === <span class="hljs-number">1</span>;
-
-        html = config.template({
-            sources: config.sources,
-            css: path.basename(config.css),
-            title: hasTitle ? first.text : path.basename(source),
-            hasTitle: hasTitle,
-            sections: sections,
-            path: path,
-            destination: destination
-        });
-
-        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"doxxo: %s -&gt; %s"</span>, source, destination(source));
-        fs.writeFileSync(destination(source), html);
-    },</pre></div></div>
+    });
+}</pre></div></div>
             
         </li>
         
@@ -371,45 +305,346 @@ MIT License
         <li id="section-8">
             <div class="annotation">
               
-              <div class="pilwrap for-h3">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <h3>configure()</h3>
-<p>This methods parses options given to Doxxo. We might use a passed-in external template, or one of the built-in <em>layouts</em>.</p><p>The user is able to override the layout file used with the <code>--template</code> parameter. In this case, it is also necessary to explicitly specify a stylesheet file. These custom templates are compiled exactly like the predefined ones, but the <code>public</code> folder is only copied for the latter.</p><h4>Arguments</h4>
+              <p><code>Doxxo.cleanPaths()</code> is a recursive function that takes an array of paths and reduces it into a unique set of files paths. It will also maintain a proper file &quot;name&quot; which is used to derive the resulting output directory.</p>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Doxxo.cleanPaths = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(paths, deep, strip, out)</span> </span>{
+    <span class="hljs-keyword">var</span> firstRun = strip == <span class="hljs-literal">null</span>;
+
+    <span class="hljs-keyword">return</span> paths.reduce(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(memo, src)</span> </span>{
+        <span class="hljs-keyword">var</span> fpath, stat;
+
+        src = path.normalize(src);
+        fpath = path.resolve(src);
+        stat = fs.statSync(fpath);
+
+        <span class="hljs-keyword">if</span> (stat.isFile()) {
+            <span class="hljs-keyword">if</span> (firstRun) src = path.basename(src);
+
+            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (src.substr(<span class="hljs-number">0</span>, strip.length) === strip) {
+                src = src.substr(strip.length);
+                <span class="hljs-keyword">while</span> (src[<span class="hljs-number">0</span>] === <span class="hljs-string">"/"</span>) src = src.substr(<span class="hljs-number">1</span>);
+            }
+
+            memo[fpath] = src;
+        }
+        
+        <span class="hljs-comment">// only traverse into directory on first run or when deep is enabled</span>
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (stat.isDirectory() &amp;&amp; (firstRun || deep)) {
+            Doxxo.cleanPaths(fs.readdirSync(fpath).map(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(f)</span> </span>{
+                <span class="hljs-keyword">return</span> path.join(src, f);
+            }), deep, strip != <span class="hljs-literal">null</span> ? strip : src, memo);
+        }
+
+        <span class="hljs-keyword">return</span> memo;
+    }, out || {});
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <h2>Parsing Code</h2>
+<p>Doxxo&#39;s primary job is to extract comments from source code and this done by the parsers. For JavaScript, <a href="https://www.npmjs.com/package/dox">dox</a> does most of the heavy lifting. Using that output, we put together an array of section objects which seperates the block level comment content from the source code. The output from parsing is actually identical to Docco, so theoretically all of Docco&#39;s parsers would work with Doxxo too.</p><p><code>Doxxo.parse()</code> is really easy to use. Pass it the source code and the file&#39;s extension and an array of sections is returned. If the source type&#39;s parser can&#39;t be found, an empty array is returned. You can add you own custom parsers by attaching them directly to the <code>Doxxo.parsers</code> object.</p><h4>Arguments</h4>
 <ul>
-<li><strong>options</strong> <em>object</em> - An object of options to configure this run of Doxxo.</li>
+<li><strong>code</strong> <em>string</em> - A string of source code.</li>
+<li><strong>type</strong> <em>string</em> - The source code type. Generally the extension of the file it came from.</li>
 </ul>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    configure: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">configure</span><span class="hljs-params">(options)</span> </span>{
-        <span class="hljs-keyword">var</span> config = _.extend({}, defaults, _.pick(options, _.keys(defaults)));
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">// takes in source code and type and returns sections</span>
+Doxxo.parse = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(code, type)</span> </span>{
+    <span class="hljs-keyword">var</span> parser = Doxxo.parsers.byType(type);
+    <span class="hljs-keyword">return</span> _.isFunction(parser) ? parser(code) : [];
+}
 
-        <span class="hljs-keyword">if</span> (options.template) {
-            <span class="hljs-keyword">if</span> (!options.css) <span class="hljs-built_in">console</span>.warn(<span class="hljs-string">"docco: no stylesheet file specified"</span>);
-            config.layout = <span class="hljs-literal">null</span>;
-        } <span class="hljs-keyword">else</span> {
-            <span class="hljs-keyword">var</span> dir = config.layout = path.resolve(__dirname, <span class="hljs-string">'../layouts'</span>, config.layout);
-            <span class="hljs-keyword">if</span> (fs.existsSync(path.join(dir, <span class="hljs-string">'public'</span>))) config.public = path.join(dir, <span class="hljs-string">'public'</span>);
-            config.template = path.join(dir, <span class="hljs-string">'docco.jst'</span>);
-            config.css = options.css || path.join(dir, <span class="hljs-string">'docco.css'</span>);
-        }
+<span class="hljs-comment">// parses, by type</span>
+Doxxo.parsers = {
+    js: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(code)</span> </span>{
+        <span class="hljs-keyword">var</span> comments, lines, sections, firstSection, comment, nextComment, codeEnd, code;
 
-        config.template = _.template(fs.readFileSync(config.template).toString());
+        sections = [];
+        comments = dox.parseComments(code, { raw: <span class="hljs-literal">true</span> });
+        <span class="hljs-keyword">if</span> (!comments.length) <span class="hljs-keyword">return</span> sections;
 
-        <span class="hljs-keyword">if</span> (options.marked) {
-            config.marked = _.isString(options.marked) ? <span class="hljs-built_in">JSON</span>.parse(fs.readFileSync(options.marked)) : options.marked;
-        }
+        lines = code.split(<span class="hljs-string">"\n"</span>);
+        firstSection = lines.slice(<span class="hljs-number">0</span>, comments[<span class="hljs-number">0</span>].line - <span class="hljs-number">1</span>).join(<span class="hljs-string">'\n'</span>);
 
-        config.sources = options.args.sort().map(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(src)</span> </span>{
-            <span class="hljs-keyword">return</span> path.relative(<span class="hljs-string">"."</span>, path.normalize(src));
+        <span class="hljs-comment">// handle the first section</span>
+        <span class="hljs-keyword">if</span> (firstSection.trim() !== <span class="hljs-string">""</span>) sections.push({
+            codeText: firstSection,
+            docsText: <span class="hljs-string">''</span>
         });
 
-        <span class="hljs-keyword">if</span> (config.index) config.index = path.relative(<span class="hljs-string">"."</span>, path.normalize(config.index));
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; comments.length; i++) {
+            comment = comments[i];
+            nextComment = comments[i + <span class="hljs-number">1</span>];
+            codeEnd = nextComment != <span class="hljs-literal">null</span> ? nextComment.line - <span class="hljs-number">1</span> : lines.length;
+            code = lines.slice(comment.codeStart - <span class="hljs-number">1</span>, codeEnd);
 
-        <span class="hljs-keyword">return</span> config;
+            <span class="hljs-comment">// replace tabs with 4 spaces</span>
+            code = code.map(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(line)</span> </span>{
+                <span class="hljs-keyword">return</span> line.replace(<span class="hljs-regexp">/^\t+/</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(m)</span> </span>{
+                    <span class="hljs-keyword">return</span> _.times(m.length, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">"    "</span>; }).join(<span class="hljs-string">""</span>);
+                });
+            });
+
+            sections.push({
+                docsText: comment.description.full,
+                codeText: code.join(<span class="hljs-string">"\n"</span>)
+            });
+        }
+
+        <span class="hljs-keyword">return</span> sections;
+    },
+
+    md: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(code)</span> </span>{
+        <span class="hljs-keyword">return</span> [{
+            codeText: <span class="hljs-string">""</span>,
+            docsText: code
+        }];
+    },
+
+    byType: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(type)</span> </span>{
+        <span class="hljs-comment">// support extensions as type</span>
+        <span class="hljs-keyword">if</span> (type[<span class="hljs-number">0</span>] === <span class="hljs-string">"."</span>) type = type.substr(<span class="hljs-number">1</span>);
+        <span class="hljs-keyword">return</span> Doxxo.parsers[type] || <span class="hljs-literal">null</span>;
     }
-};</pre></div></div>
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <h2>Documenting</h2>
+<p>The real meat of Doxxo happens behind several Doxxo instance methods. These methods are designed to take the source files, convert them into HTML files and save everything to the output folder.</p>
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <h3>Doxxo#document()</h3>
+<p>This is main method of a Doxxo instance and is responsible for glueing together all the documentation steps. This method parses the sources, generates the output folder, copies layout assets and then generates the documentation files. A Promise object is returned that is resolved when the process completes.</p><h4>Arguments</h4>
+<ul>
+<li><strong>callback</strong> <em>function; optional</em> - A function to call when the process completes.</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Doxxo.prototype.document = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(callback)</span> </span>{
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>,
+        opts = <span class="hljs-keyword">this</span>.options;
+
+    <span class="hljs-comment">// parse sources and filter out the empties</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.parseSources().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(sources)</span> </span>{
+        <span class="hljs-comment">// do nothing if there are no sources</span>
+        <span class="hljs-keyword">if</span> (!sources.length) <span class="hljs-keyword">return</span>;
+
+        <span class="hljs-comment">// create the output directory</span>
+        <span class="hljs-keyword">return</span> mkdirp(opts.output)
+
+        <span class="hljs-comment">// copy layout assets if specified</span>
+        .then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            <span class="hljs-keyword">if</span> (opts.assets) <span class="hljs-keyword">return</span> self.copyLayoutAssets();
+        })
+
+        <span class="hljs-comment">// process and write each source</span>
+        .then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            <span class="hljs-keyword">return</span> Promise.each(
+                sources,
+                self.write.bind(<span class="hljs-keyword">this</span>),
+                { concurrency: <span class="hljs-number">1</span> }
+            );
+        });
+    })
+
+    <span class="hljs-comment">// for the old-school asyncs</span>
+    .nodeify(callback);
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <h3>Doxxo#parseSources()</h3>
+<p><code>Doxxo.resolveSources()</code> is very unbiased when comes to the types of files it accepts. In order to be slightly more future proof, the step of actually verifying and parsing a source comes right before we start generating the documentation. This method will filter out any unsupported files based on what parsers are available and then parse each source accordingly. A Promise object is returned that is resolved when all sources have been removed or parsed.</p>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Doxxo.prototype.parseSources = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-comment">// parse sources and filter out the empties</span>
+    <span class="hljs-keyword">return</span> Promise.resolve(<span class="hljs-keyword">this</span>.sources).bind(<span class="hljs-keyword">this</span>).filter(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(src)</span> </span>{
+        <span class="hljs-comment">// check the type is supported</span>
+        <span class="hljs-keyword">if</span> (!Doxxo.parsers.byType(path.extname(src.full))) {
+            <span class="hljs-keyword">this</span>.options.log(<span class="hljs-string">"Ignoring unsupported file: '%s'"</span>, path.relative(cwd, src.full));
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        }
+
+        <span class="hljs-comment">// grab file contents</span>
+        <span class="hljs-keyword">return</span> fs.readFileAsync(src.full, <span class="hljs-string">"utf-8"</span>)
+
+        <span class="hljs-comment">// parse code into sections</span>
+        .then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(code)</span> </span>{
+            <span class="hljs-keyword">var</span> sections = src.sections = Doxxo.parse(code, path.extname(src.full));
+            
+            <span class="hljs-comment">// remove sources with empty sections</span>
+            <span class="hljs-keyword">return</span> sections &amp;&amp; sections.length;
+        });
+    })
+
+    <span class="hljs-comment">// set the new sources array</span>
+    .tap(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(sources)</span> </span>{
+        <span class="hljs-keyword">this</span>.sources = sources;
+    });
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <h3>Doxxo#copyLayoutAssets()</h3>
+<p>Layout directories can contain a <code>public/</code> folder with additional files needed for the documentation, like styling. This method checks for this directory and copies it into the output folder.</p>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Doxxo.prototype.copyLayoutAssets = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> from = path.join(<span class="hljs-keyword">this</span>.options.layout, <span class="hljs-string">"public"</span>),
+        to = path.join(<span class="hljs-keyword">this</span>.options.output, <span class="hljs-string">"public"</span>);
+
+    <span class="hljs-comment">// check that it exists and is a directory</span>
+    <span class="hljs-keyword">return</span> fs.statAsync(from).bind(<span class="hljs-keyword">this</span>)
+
+    <span class="hljs-comment">// copy the folder</span>
+    .then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(stat)</span> </span>{
+        <span class="hljs-keyword">if</span> (stat.isDirectory()) <span class="hljs-keyword">return</span> cpr(from, to, {
+            deleteFirst: <span class="hljs-literal">false</span>,
+            overwrite: <span class="hljs-literal">true</span>,
+            confirm: <span class="hljs-literal">false</span>
+        });
+    }, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+        <span class="hljs-keyword">if</span> (e.code !== <span class="hljs-string">"ENOENT"</span>) <span class="hljs-keyword">throw</span> e;
+    })
+
+    <span class="hljs-comment">// log when finished</span>
+    .then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">this</span>.options.log(<span class="hljs-string">"Copied layout assets to '%s'"</span>, path.relative(cwd, to));
+    });
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <h3>Doxxo#format()</h3>
+<p>This method has the responsibility of producing the HTML documentation from a source object. This mostly means putting together template data and methods, running the template function, returning the resulting HTML.</p><h4>Arguments</h4>
+<ul>
+<li><strong>source</strong> <em>object</em> - The source object to turn into HTML. This should have a <code>.sections</code> property with parsed data on it.</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Doxxo.prototype.format = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(source)</span> </span>{
+    <span class="hljs-keyword">var</span> firstSection, first, hasTitle, html,
+        opts = <span class="hljs-keyword">this</span>.options,
+        sections = source.sections,
+        outdir = path.dirname(source.out);
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">destination</span><span class="hljs-params">(file)</span> </span>{
+        <span class="hljs-keyword">if</span> (_.isObject(file)) file = file.out;
+        <span class="hljs-keyword">return</span> path.relative(outdir, path.resolve(opts.output, file));
+    }
+
+    sections.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(section)</span> </span>{
+        <span class="hljs-keyword">var</span> code = highlightjs.highlight(<span class="hljs-string">"javascript"</span>, section.codeText).value;
+        code = code.replace(<span class="hljs-regexp">/\s+$/</span>, <span class="hljs-string">''</span>);
+        section.codeHtml = <span class="hljs-string">"&lt;div class='highlight'&gt;&lt;pre&gt;"</span> + code + <span class="hljs-string">"&lt;/pre&gt;&lt;/div&gt;"</span>;
+        section.docsHtml = marked(section.docsText, opts.marked);
+        <span class="hljs-keyword">return</span> section;
+    });
+
+    firstSection = _.find(sections, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(section)</span> </span>{
+        <span class="hljs-keyword">return</span> section.docsText.length &gt; <span class="hljs-number">0</span>
+    });
+
+    <span class="hljs-keyword">if</span> (firstSection) first = marked.lexer(firstSection.docsText)[<span class="hljs-number">0</span>];
+    hasTitle = first &amp;&amp; first.type === <span class="hljs-string">'heading'</span> &amp;&amp; first.depth === <span class="hljs-number">1</span>;
+
+    <span class="hljs-keyword">return</span> opts.template({
+        source: source,
+        sources: <span class="hljs-keyword">this</span>.sources,
+        title: hasTitle ? first.text : source.name,
+        hasTitle: hasTitle,
+        sections: sections,
+        path: path,
+        destination: destination,
+        doxxo: <span class="hljs-keyword">this</span>
+    });
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <h3>Doxxo#write()</h3>
+<p>Takes in a parsed source object, produces HTML with <code>.format()</code>, and writes the HTML to the correct output path.</p><h4>Arguments</h4>
+<ul>
+<li><strong>src</strong> <em>object</em> - The source object to format and save.</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Doxxo.prototype.write = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(src)</span> </span>{
+    <span class="hljs-comment">// make any leading directories</span>
+    <span class="hljs-keyword">return</span> mkdirp(path.dirname(src.out)).bind(<span class="hljs-keyword">this</span>)
+
+    <span class="hljs-comment">// format and write to the filesystem</span>
+    .then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> fs.writeFileAsync(src.out, <span class="hljs-keyword">this</span>.format(src));
+    })
+
+    <span class="hljs-comment">// log when finished</span>
+    .then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">this</span>.options.log(<span class="hljs-string">"%s -&gt; %s"</span>, path.relative(cwd, src.full), path.relative(cwd, src.out));
+    });
+}</pre></div></div>
             
         </li>
         

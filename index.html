@@ -5,7 +5,7 @@
   <title>Doxxo</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-  <link rel="stylesheet" media="all" href="docco.css" />
+  <link rel="stylesheet" media="all" href="public/main.css" />
 </head>
 <body>
   <div id="container">
@@ -45,17 +45,28 @@
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
               <h1>Doxxo</h1>
-<p>Doxxo is a quick-and-dirty documentation generator inspired by <a href="http://jashkenas.github.com/docco/">Docco</a>. Unlike Docco, Doxxo parses block-level comments to find documentation.</p><p>Doxxo only supports JavaScript at the moment.</p><p>Check out <a href="http://beneaththeink.github.io/doxxo/doxxo.html">the Doxxo documentation</a>, produced with Doxxo itself!</p><h2>Installation</h2>
-<pre><code>npm install -g doxxo
+<p>A documentation generator inspired by <a href="http://jashkenas.github.com/docco/">Docco</a>. Doxxo parses block-level comments in JavaScript code to find documentation and parses them as markdown. Doxxo only supports JavaScript and Markdown files at the moment.</p><p>Check out <a href="http://beneaththeink.github.io/doxxo/doxxo.html">the Doxxo documentation</a>, produced with Doxxo itself!</p><h2>Installation</h2>
+<pre><code>$ npm install -g doxxo
 </code></pre><h2>Usage</h2>
-<pre><code>doxxo [options] FILES
-</code></pre><p>Options:</p><pre><code>-h, --help             output usage information
--V, --version          output the version number
--l, --layout [layout]  choose a built-in layouts (parallel, linear)
--c, --css [file]       use a custom css file
--o, --output [path]    use a custom output path
--t, --template [file]  use a custom .jst template
--m, --marked [file]    use custom marked options
+<pre><code>Usage:
+
+    $ doxxo [OPTIONS] FILES...
+
+    FILES can be any .js or .md source file or a directory containing .js or
+    .md files. Directories are only traversed a single level, unless the
+    --recursive flag is enabled.
+
+Options:
+
+    -h, --help             output usage information
+    -v, --version          output the version number
+    -o, --output [path]    use a custom output path (default: &#39;docs&#39;)
+    -l, --layout [layout]  use a layout folder or a built-in layout (&#39;bti&#39;,
+                           &#39;parallel&#39;, &#39;classic&#39;, &#39;linear&#39;, &#39;plain-markdown&#39;)
+    -t, --template [file]  use a custom .jst template
+    --no-assets            do not copy layout assets into the output folder
+    -r, --recursive        look in sub-directories for files
+    -i, --index [file]     mark a file as the index file
 </code></pre>
             </div>
             
