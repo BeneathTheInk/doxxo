@@ -259,11 +259,11 @@ Doxxo.defaults = {
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <h2>Resolving Source Files</h2>
-<p>Using Doxxo is simple to use because a lot of the magic happens when dealing with the file paths. A key aspect of Doxxo is taking the user provided relative paths and determining where their documentation counterparts should be saved. This requires using a blend of the current working directory and the output directory to generate the correct paths and can get especially tricky when dealing with deep file trees.</p><p><code>Doxxo.resolveSource()</code> will produce a unique array of source file objects from a list of file paths. Source objects serve as a representation of a specific file including details like the resulting output path. These source objects have several properties that are detailed below.</p><h4>Arguments</h4>
+<p>Using Doxxo is simple because a lot of the magic happens when dealing with the file paths. A key aspect of Doxxo is taking the user provided relative paths and determining where their documentation counterparts should be saved. This requires using a blend of the current working directory and the output directory to generate the correct paths and can get especially tricky when dealing with deep file trees.</p><p><code>Doxxo.resolveSource()</code> will produce a unique array of source file objects from a list of file paths. Source objects serve as a representation of a specific file including details like the resulting output path. These source objects have several properties that are detailed below.</p><h4>Arguments</h4>
 <ul>
 <li><strong>paths</strong> <em>array</em> - An array of file paths.</li>
 <li><strong>opts</strong> <em>object; optional</em> - An object of options, usually whatever comes out of <code>Doxxo.configure()</code>.<ul>
-<li><strong>opts.recursive</strong> <em>boolean</em> - Whether or not deeply traverse all directories for source files.</li>
+<li><strong>opts.recursive</strong> <em>boolean</em> - Whether or not to deeply traverse all directories for source files.</li>
 <li><strong>opts.output</strong> <em>string</em> - The documentation output directory.</li>
 <li><strong>opts.index</strong> <em>string | null</em> - The file to use as the index. This file will out to <code>index.html</code> instead of a variety of its name.</li>
 </ul>
@@ -353,7 +353,7 @@ Doxxo.defaults = {
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <h2>Parsing Code</h2>
-<p>Doxxo&#39;s primary job is to extract comments from source code and this done by the parsers. For JavaScript, <a href="https://www.npmjs.com/package/dox">dox</a> does most of the heavy lifting. Using that output, we put together an array of section objects which seperates the block level comment content from the source code. The output from parsing is actually identical to Docco, so theoretically all of Docco&#39;s parsers would work with Doxxo too.</p><p><code>Doxxo.parse()</code> is really easy to use. Pass it the source code and the file&#39;s extension and an array of sections is returned. If the source type&#39;s parser can&#39;t be found, an empty array is returned. You can add you own custom parsers by attaching them directly to the <code>Doxxo.parsers</code> object.</p><h4>Arguments</h4>
+<p>Doxxo&#39;s primary job is to extract comments from source code and this done by the parsers. For JavaScript, <a href="https://www.npmjs.com/package/dox">dox</a> does most of the heavy lifting. Using that output, we put together an array of section objects which seperates the block level comment content from the source code. The output from parsing is actually identical to Docco, so theoretically all of Docco&#39;s parsers would work with Doxxo too.</p><p><code>Doxxo.parse()</code> is really easy to use. Pass it the source code and the file&#39;s extension and an array of sections is returned. If the source type&#39;s parser can&#39;t be found, an empty array is returned. You can add your own custom parsers by attaching them directly to the <code>Doxxo.parsers</code> object.</p><h4>Arguments</h4>
 <ul>
 <li><strong>code</strong> <em>string</em> - A string of source code.</li>
 <li><strong>type</strong> <em>string</em> - The source code type. Generally the extension of the file it came from.</li>
