@@ -472,7 +472,7 @@ Doxxo.parsers = {
         .then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
             <span class="hljs-keyword">return</span> Promise.each(
                 sources,
-                self.write.bind(<span class="hljs-keyword">this</span>),
+                self.write.bind(self),
                 { concurrency: <span class="hljs-number">1</span> }
             );
         });
